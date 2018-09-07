@@ -2,6 +2,7 @@ import json
 import time
 from collections import defaultdict
 import logging
+import re
 
 from praw import Reddit
 
@@ -47,8 +48,10 @@ if __name__ == '__main__':
                         if comment.id not in cache:
                             cache.append(comment.id)
                             for keyword in keywords:
+                                keyword = keyword.lower()
                                 try:
-                                    if keyword.lower() in comment.body.lower():
+                                    if re.match(f'(^{keyword} )|( {keyword} )',
+                                                comment.body):
                                         occurences[keyword] += 1
                                 except:
                                     logging.info(
