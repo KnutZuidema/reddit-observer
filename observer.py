@@ -41,26 +41,29 @@ if __name__ == '__main__':
                     try:
                         submission.comments.replace_more(limit=depth_comments)
                     except:
-                        logging.info(f'  Cannot get more comments '
-                                     f'on submission {submission.id}')
+                        logging.debug(f'  Cannot get more comments '
+                                      f'on submission {submission.id}')
                     for comment in submission.comments.list():
-                        logging.info(f'      Observing comment {comment.id}')
                         if comment.id not in cache:
                             cache.append(comment.id)
                             for keyword in keywords:
                                 keyword = keyword.lower()
                                 try:
-                                    if re.match(f'(^{keyword} )|( {keyword} )',
-                                                comment.body):
+                                    if re.search(
+                                            f'(^{keyword} )|( {keyword} )',
+                                            comment.body):
+                                        logging.info(
+                                            f'      found {keyword} in '
+                                            f'comment {comment.id}')
                                         occurences[keyword] += 1
                                 except:
-                                    logging.info(
+                                    logging.debug(
                                         f'      Comment {comment.id} in '
                                         f'submission {submission.id} '
                                         f'doesn\'t have a body')
                                     break
                         else:
-                            logging.info(
+                            logging.debug(
                                 f'      Skipping comment {comment.id} '
                                 f'(exists in cache)')
             config['occurences'] = occurences
