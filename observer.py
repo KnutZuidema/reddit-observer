@@ -6,7 +6,8 @@ from prawcore import PrawcoreException
 
 from praw import Reddit
 
-logging.basicConfig(filename='observer.log', level=logging.INFO)
+logging.basicConfig(filename='observer.log', level=logging.INFO,
+                    format='%(asctime)s:%(levelname)s: %(message)')
 
 if __name__ == '__main__':
     logging.info('Initializing from config...')
