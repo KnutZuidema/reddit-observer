@@ -150,10 +150,10 @@
       "Zoe",
       "Zyra"
     ],
-    "interval": 60,
+    "interval": 600,
     "depth": {
-      "submission": 30,
-      "comment": 32
+      "submission": 100,
+      "comment": null
     }
   },
   "occurences": {},
