@@ -2,9 +2,10 @@ import json
 import time
 from collections import defaultdict
 import logging
-from prawcore import PrawcoreException
+import re
 
 from praw import Reddit
+from prawcore import PrawcoreException
 
 logging.basicConfig(filename='observer.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s: %(message)s')
