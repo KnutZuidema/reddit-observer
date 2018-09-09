@@ -152,7 +152,7 @@
     ],
     "interval": 600,
     "depth": {
-      "submission": 100,
+      "submission": 30,
       "comment": null
     }
   },
