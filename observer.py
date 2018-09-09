@@ -7,7 +7,7 @@ import re
 from praw import Reddit
 from prawcore import PrawcoreException
 
-logging.basicConfig(filename='observer.log', level=logging.INFO,
+logging.basicConfig(filename='observer.log', level=logging.INFO, filemode='w',
                     format='%(asctime)s:%(levelname)s: %(message)s')
 
 if __name__ == '__main__':
