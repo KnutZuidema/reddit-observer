@@ -3,6 +3,7 @@ import time
 from collections import defaultdict
 import logging
 import re
+from asyncio import sleep, get_event_loop, gather
 
 from praw import Reddit
 from prawcore import PrawcoreException
@@ -18,54 +19,36 @@ reddit = Reddit(client_id=config['credentials']['client_id'],
 subreddits = config['parameters']['subreddits']
 keywords = config['parameters']['keywords']
 interval = config['parameters']['interval']
-depth_submissions = config['parameters']['depth']['submission']
-depth_comments = config['parameters']['depth']['comment']
+cache = config.get('cache', [])
+comments_observed = config.get('comments_observed', 0)
 occurrences = defaultdict(int)
 occurrences.update(config['occurences'])
-cache = config['cache']
-iterations = config.get('iterations', 0)
 
 
-def observe():
-    global subreddits, iterations
-    iterations += 1
-    logging.info(f'Observer iteration {iterations}')
-    try:
-        for subreddit in subreddits:
-            observe_submissions(subreddit)
-    except PrawcoreException:
-        logging.debug('PRAW exception, waiting 60 seconds')
-        time.sleep(60)
+async def observe(subreddit: str):
+    global comments_observed
+    while True:
+        for comment in reddit.subreddit(subreddit).stream.comments(
+                pause_after=2):
+            if comment is None:
+                print('waiting')
+                await sleep(5)
+                continue
+            comments_observed += 1
+            observe_keywords(comment)
+            print(f'observing {comment.id}')
 
 
-def observe_submissions(subreddit):
-    global reddit, depth_submissions, depth_comments
-    logging.info(f'Observing subreddit {subreddit}')
-    for submission in reddit.subreddit(subreddit).new(limit=depth_submissions):
-        submission.comment_sort = 'new'
-        # noinspection PyBroadException
-        try:
-            submission.comments.replace_more(limit=depth_comments)
-        except:
-            logging.debug(f'Failed to get more comments for '
-                          f'submission {submission.id}')
-        observe_comments(submission)
-
-
-def observe_comments(submission):
-    global cache
-    logging.info(f'Observing submission {submission.id}: {submission.title}')
-    for comment in submission.comments.list():
-        if comment.id not in cache:
-            cache.append(comment.id)
-        else:
-            logging.debug(f'Skipping comment {comment.id}')
-            continue
-        observe_keywords(comment)
+async def save_every(seconds):
+    while True:
+        config['occurences'] = occurrences
+        config['comments_observed'] = comments_observed
+        with open('config.json', 'w') as config_file:
+            json.dump(config, config_file, indent=2)
+        await sleep(seconds)
 
 
 def observe_keywords(comment):
-    global keywords, occurrences
     for keyword in keywords:
         keyword = keyword.lower()
         try:
@@ -77,20 +60,11 @@ def observe_keywords(comment):
             break
 
 
-def save_observations():
-    config['occurences'] = occurrences
-    config['cache'] = cache
-    config['iterations'] = iterations
-    with open('config.json', 'w') as config_file:
-        json.dump(config, config_file, indent=2)
-
-
 if __name__ == '__main__':
     try:
-        while True:
-            observe()
-            save_observations()
-            time.sleep(interval)
+        loop = get_event_loop()
+        subreddit_coroutines = [observe(subreddit) for subreddit in subreddits]
+        loop.run_until_complete(
+            gather(*subreddit_coroutines, save_every(interval)))
     except KeyboardInterrupt:
         logging.info('Keyboard interrupt, shutting down')
-        save_observations()
