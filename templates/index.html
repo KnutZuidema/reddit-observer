@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Observer</title>
+  <script
+			  src="https://code.jquery.com/jquery-3.3.1.js"
+			  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+			  crossorigin="anonymous">
+  </script>
+  <script>
+    $(function () {
+        let mentions = {{ data|tojson|safe }};
+        $('.header>#mentions').click(function () {
+            let sorted = Object.keys(mentions).sort(function (value1, value2) {
+                return mentions[value1] - mentions[value2];
+            });
+            for (let champion in sorted){
+                $(`#${champion}`).insertAfter('#header')
+            }
+        })
+    })
+  </script>
+</head>
+<body>
+  <table>
+    <tr class="header">
+      <th id="champion">Champion</th>
+      <th id="mentions">Mentions</th>
+    </tr>
+    {% for champion, mentions in data.items() %}
+    <tr id="{{ champion }}">
+      <td>{{ champion }}</td>
+      <td>{{ mentions }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

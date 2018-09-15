@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, render_template
 import json
 
 
@@ -9,8 +9,8 @@ app = Flask(__name__)
 def occurrences():
     with open('config.json') as file:
         config = json.load(file)
-    return jsonify(config['occurrences'])
+    return render_template('index.html', data=config['occurrences'])
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', 8888)
+    app.run(port=8888)
