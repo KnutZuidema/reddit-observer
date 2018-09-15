@@ -16,6 +16,7 @@
             let sorted = Object.keys(mentions).sort(function (value1, value2) {
                 return mentions[value1] - mentions[value2];
             });
+	    console.log(sorted);
             for (let champion in sorted){
                 $(`#${champion}`).insertAfter('#header')
             }
