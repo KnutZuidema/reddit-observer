@@ -15,8 +15,6 @@ with open('config.json') as file:
 reddit = Reddit(client_id=config['credentials']['client_id'],
                 client_secret=config['credentials']['client_secret'],
                 user_agent='Reddit Observer v0.1 by SgtBlackScorp')
-subreddits = config['parameters']['subreddits']
-keywords = config['parameters']['keywords']
 mentions = defaultdict(list)
 
 
@@ -87,7 +85,8 @@ if __name__ == '__main__':
     create_database()
     try:
         loop = get_event_loop()
-        subreddit_coroutines = [observe(subreddit) for subreddit in subreddits]
+        subreddit_coroutines = [observe(subreddit) for subreddit
+                                in config['parameters']['subreddits']]
         loop.run_until_complete(
             gather(*subreddit_coroutines, save(), reload_config()))
     except KeyboardInterrupt:
