@@ -61,7 +61,8 @@ def observe_keywords(comment):
     for keyword in keywords:
         keyword = keyword.lower()
         try:
-            if re.search(f'(^{keyword} )|( {keyword} )', comment.body):
+            if re.search(fr'(^{keyword} )|( {keyword} )|( {keyword}\.)',
+                         comment.body):
                 logging.info(f'Found {keyword} in comment {comment.id}')
                 mentions[keyword] += [{
                     'timestamp': comment.created,
