@@ -57,8 +57,16 @@ async def save():
         await sleep(config['parameters']['save_interval'])
 
 
+async def reload_config():
+    global config
+    while True:
+        with open('config.json') as file:
+            config = json.load(file)
+        await sleep(config['parameters']['config_update_interval'])
+
+
 def observe_keywords(comment):
-    for keyword in keywords:
+    for keyword in config['parameters']['keywords']:
         keyword = keyword.lower()
         try:
             if re.search(fr'(^{keyword} )|( {keyword} )|( {keyword}\.)',
@@ -81,6 +89,6 @@ if __name__ == '__main__':
         loop = get_event_loop()
         subreddit_coroutines = [observe(subreddit) for subreddit in subreddits]
         loop.run_until_complete(
-            gather(*subreddit_coroutines, save()))
+            gather(*subreddit_coroutines, save(), reload_config()))
     except KeyboardInterrupt:
         logging.info('Keyboard interrupt, shutting down')
