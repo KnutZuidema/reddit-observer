@@ -1,36 +1,20 @@
 body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family: Serif, serif;
-    background: url("https://images4.alphacoders.com/600/thumb-1920-600528.png") no-repeat;
     background-size: cover;
-    background-attachment: fixed;
+    background: url("https://images4.alphacoders.com/600/thumb-1920-600528.png")
+                no-repeat fixed;
 }
 
-table {
-    margin: 20px auto;
-    border-collapse: collapse;
-    text-align: center;
+#content {
+    margin-top: 50px;
 }
-tr {
-    line-height: 30px;
-    background: yellow;
-    transition: background 500ms;
+
+#champion_table {
+    opacity: 0.9;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
 }
-.entry:hover {
-    background: orange;
-}
-.header {
-    background: red;
-    position: sticky;
-    top: 0px;
-}
-th {
-    font-weight: 500;
-}
-td, th {
-    width: 80px;
-    border: 2px solid black;
+
+.navbar {
+    border-bottom: 3px solid lightgray;
 }
