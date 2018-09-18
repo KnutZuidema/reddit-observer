@@ -3,6 +3,7 @@ from collections import defaultdict
 import logging
 import re
 from asyncio import sleep, get_event_loop, gather
+import sqlite3
 
 from praw import Reddit
 
@@ -16,15 +17,24 @@ reddit = Reddit(client_id=config['credentials']['client_id'],
                 user_agent='Reddit Observer v0.1 by SgtBlackScorp')
 subreddits = config['parameters']['subreddits']
 keywords = config['parameters']['keywords']
-interval = config['parameters']['interval']
-cache = config.get('cache', [])
-comments_observed = config.get('comments_observed', 0)
-occurrences = defaultdict(int)
-occurrences.update(config['occurences'])
+mentions = defaultdict(list)
+
+
+def create_database():
+    connection = sqlite3.connect('keywords.db')
+    cursor = connection.cursor()
+    cursor.execute('create table if not exists keywords('
+                   'id integer primary key autoincrement,'
+                   'keyword text,'
+                   'timestamp integer,'
+                   'permalink text,'
+                   'subreddit text,'
+                   'commenter text)')
+    connection.commit()
+    connection.close()
 
 
 async def observe(subreddit: str):
-    global comments_observed
     while True:
         for comment in reddit.subreddit(subreddit).stream.comments(
                 pause_after=2):
@@ -32,18 +42,21 @@ async def observe(subreddit: str):
                 print('waiting')
                 await sleep(5)
                 continue
-            comments_observed += 1
             observe_keywords(comment)
             print(f'observing {comment.id}')
 
 
-async def save_every(seconds):
+async def save():
     while True:
-        config['occurences'] = occurrences
-        config['comments_observed'] = comments_observed
-        with open('config.json', 'w') as config_file:
-            json.dump(config, config_file, indent=2)
-        await sleep(seconds)
+        connection = sqlite3.connect('keywords.db')
+        cursor = connection.cursor()
+        for keyword, data in mentions.items():
+            cursor.execute('insert into keywords values (?, ?, ?, ?, ?)',
+                           (keyword, data['timestamp'], data['permalink'],
+                            data['subreddit'], data['commenter']))
+        connection.commit()
+        connection.close()
+        await sleep(config['parameters']['save_interval'])
 
 
 def observe_keywords(comment):
@@ -52,17 +65,23 @@ def observe_keywords(comment):
         try:
             if re.search(f'(^{keyword} )|( {keyword} )', comment.body):
                 logging.info(f'Found {keyword} in comment {comment.id}')
-                occurrences[keyword] += 1
+                mentions[keyword] += [{
+                    'timestamp': comment.created,
+                    'permalink': comment.permalink,
+                    'subreddit': comment.subreddit.display_name,
+                    'commenter': comment.author.name
+                }]
         except AttributeError:
             logging.debug(f'Comment {comment.id} doesn\'t have a body')
             break
 
 
 if __name__ == '__main__':
+    create_database()
     try:
         loop = get_event_loop()
         subreddit_coroutines = [observe(subreddit) for subreddit in subreddits]
         loop.run_until_complete(
-            gather(*subreddit_coroutines, save_every(interval)))
+            gather(*subreddit_coroutines, save()))
     except KeyboardInterrupt:
         logging.info('Keyboard interrupt, shutting down')
