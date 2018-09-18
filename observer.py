@@ -39,11 +39,9 @@ async def observe(subreddit: str):
         for comment in reddit.subreddit(subreddit).stream.comments(
                 pause_after=2):
             if comment is None:
-                print('waiting')
                 await sleep(5)
                 continue
             observe_keywords(comment)
-            print(f'observing {comment.id}')
 
 
 async def save():
