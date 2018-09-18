@@ -9,7 +9,7 @@
       <th id="mentions">Mentions</th>
     </tr>
     </thead>
-    {% for champion, mentions in data.items() %}
+    {% for champion, mentions in data|dictsort(by='value', reverse=True) %}
       <tr class="warning" id="{{ champion }}">
         <td>{{ champion|title }}</td>
         <td>{{ mentions }}</td>
