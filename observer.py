@@ -1,12 +1,10 @@
 import json
-import time
 from collections import defaultdict
 import logging
 import re
 from asyncio import sleep, get_event_loop, gather
 
 from praw import Reddit
-from prawcore import PrawcoreException
 
 logging.basicConfig(filename='observer.log', level=logging.INFO, filemode='w',
                     format='%(asctime)s:%(levelname)s: %(message)s')
