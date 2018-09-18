@@ -150,12 +150,7 @@
       "Zoe",
       "Zyra"
     ],
-    "interval": 600,
-    "depth": {
-      "submission": 30,
-      "comment": null
-    }
-  },
-  "occurrences": {},
-  "cache": []
+    "save_interval": 30,
+    "config_update_interval": 30
+  }
 }
