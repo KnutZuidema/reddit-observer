@@ -44,12 +44,17 @@ async def observe(subreddit: str):
 
 async def save():
     while True:
+        print('saving')
         connection = sqlite3.connect('keywords.db')
         cursor = connection.cursor()
-        for keyword, data in mentions.items():
-            cursor.execute('insert into keywords values (?, ?, ?, ?, ?)',
-                           (keyword, data['timestamp'], data['permalink'],
-                            data['subreddit'], data['commenter']))
+        for keyword, times in mentions.items():
+            for data in times:
+                cursor.execute('insert into keywords(keyword, timestamp,'
+                               'permalink, subreddit, commenter)'
+                               'values (?, ?, ?, ?, ?)',
+                               (keyword, data['timestamp'], data['permalink'],
+                                data['subreddit'], data['commenter']))
+            mentions[keyword] = []
         connection.commit()
         connection.close()
         await sleep(config['parameters']['save_interval'])
@@ -58,6 +63,7 @@ async def save():
 async def reload_config():
     global config
     while True:
+        print('reloading')
         with open('config.json') as file:
             config = json.load(file)
         await sleep(config['parameters']['config_update_interval'])
@@ -69,6 +75,7 @@ def observe_keywords(comment):
         try:
             if re.search(fr'(^{keyword} )|( {keyword} )|( {keyword}\.)',
                          comment.body):
+                print(f'found {keyword}')
                 logging.info(f'Found {keyword} in comment {comment.id}')
                 mentions[keyword] += [{
                     'timestamp': comment.created,
