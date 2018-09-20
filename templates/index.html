@@ -1,19 +1,26 @@
 {% extends 'base.html' %}
+{% block header %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/sorttable.js') }}"></script>
+{% endblock %}
 {% block content %}
   <div class="container" id="content">
-    <table class="table table-dark table-hover offset-sm-2 col-sm-8" id="champion_table">
+    <table class="table table-dark table-hover offset-sm-2 col-sm-8 sortable"
+           id="champion_table">
       <thead>
       <tr>
         <th scope="col" id="champion">Champion</th>
         <th scope="col" id="mentions_day">Mentions in the last 24h</th>
-        <th scope="col" id="mentions_all">Mentions</th>
+        <th scope="col" id="mentions_change">Change to the previous 24h</th>
+        <th scope="col" id="mentions_all">Mentions total</th>
       </tr>
       </thead>
       <tbody>
       {% for champion, mentions in data %}
         <tr id="{{ champion }}">
           <td scope="row">{{ champion|title }}</td>
-          <td scope="row">{{ mentions.day }}
+          <td scope="row">{{ mentions.day }}</td>
+          <td scope="row">
             {% if mentions.change > 0 %}
               <span class="badge badge-success">+{{ mentions.change }}</span>
             {% elif mentions.change < 0 %}
