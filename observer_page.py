@@ -16,8 +16,9 @@ def occurrences():
     connection = sqlite3.connect('keywords.db')
     cursor = connection.cursor()
     data = defaultdict(dict)
-    # 86400 == 24h in seconds
-    yesterday = time.time() - 86400
+    day = 86400
+    yesterday = time.time() - day
+    yesteryesterday = yesterday - day
     send = tuple()
     for keyword in keywords:
         try:
@@ -28,7 +29,12 @@ def occurrences():
                            f'and timestamp > {yesterday}',
                            (keyword.lower(),))
             data[keyword]['day'] = len(cursor.fetchall())
-            pprint(data.items())
+            cursor.execute(f'select * from keywords where keyword=? '
+                           f'and timestamp between {yesterday} '
+                           f'and {yesteryesterday}',
+                           (keyword.lower(),))
+            change = data[keyword]['day'] - len(cursor.fetchall())
+            data[keyword]['change'] = change
             send = sorted(data.items(), key=lambda item: item[1]['day'],
                           reverse=True)
         except sqlite3.OperationalError:
