@@ -24,7 +24,7 @@
             {% if mentions.change > 0 %}
               <span class="badge badge-success">+{{ mentions.change }}</span>
             {% elif mentions.change < 0 %}
-              <span class="badge badge-danger">-{{ mentions.change }}</span>
+              <span class="badge badge-danger">{{ mentions.change }}</span>
             {% else %}
               <span class="badge badge-secondary">{{ mentions.change }}</span>
             {% endif %}
