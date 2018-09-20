@@ -30,8 +30,8 @@ def occurrences():
                            (keyword.lower(),))
             data[keyword]['day'] = len(cursor.fetchall())
             cursor.execute(f'select * from keywords where keyword=? '
-                           f'and timestamp between {yesterday} '
-                           f'and {yesteryesterday}',
+                           f'and timestamp between {yesteryesterday} '
+                           f'and {yesterday}',
                            (keyword.lower(),))
             change = data[keyword]['day'] - len(cursor.fetchall())
             data[keyword]['change'] = change
