@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
   <div class="container" id="content">
-    <table class="table table-hover offset-sm-2 col-sm-8" id="champion_table">
+    <table class="table table-dark table-hover offset-sm-2 col-sm-8" id="champion_table">
       <thead>
-      <tr class="bg-primary">
+      <tr>
         <th scope="col" id="champion">Champion</th>
         <th scope="col" id="mentions_day">Mentions in the last 24h</th>
         <th scope="col" id="mentions_all">Mentions</th>
@@ -11,7 +11,7 @@
       </thead>
       <tbody>
       {% for champion, mentions in data %}
-        <tr class="bg-info" id="{{ champion }}">
+        <tr id="{{ champion }}">
           <td scope="row">{{ champion|title }}</td>
           <td scope="row">{{ mentions.day }}
             {% if mentions.change > 0 %}
@@ -19,7 +19,7 @@
             {% elif mentions.change < 0 %}
               <span class="badge badge-danger">-{{ mentions.change }}</span>
             {% else %}
-              <span class="badge">{{ mentions.change }}</span>
+              <span class="badge badge-secondary">{{ mentions.change }}</span>
             {% endif %}
           </td>
           <td scope="row">{{ mentions.all }}</td>
