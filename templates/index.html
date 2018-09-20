@@ -1,20 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container" id="content">
+
 <div class="col-sm-offset-2 col-sm-8">
   <table class="table table-hover" id="champion_table">
     <thead>
     <tr class="info">
       <th id="champion">Champion</th>
-      <th id="mentions">Mentions</th>
+      <th id="mentions_day">Mentions in the last 24h  </th>
+      <th id="mentions_all">Mentions</th>
     </tr>
     </thead>
-    {% for champion, mentions in data|dictsort(by='value', reverse=True) %}
+    <tbody>
+    {% for champion, mentions in data %}
       <tr class="warning" id="{{ champion }}">
         <td>{{ champion|title }}</td>
-        <td>{{ mentions }}</td>
+        <td>{{ mentions.day }}</td>
+        <td>{{ mentions.all }}</td>
       </tr>
     {% endfor %}
+    </tbody>
   </table>
 </div>
 </div>

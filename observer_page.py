@@ -1,6 +1,9 @@
 from flask import Flask, render_template
 import json
 import sqlite3
+from collections import defaultdict
+import time
+from pprint import pprint
 
 app = Flask(__name__)
 
@@ -12,15 +15,25 @@ def occurrences():
     keywords = config['parameters']['keywords']
     connection = sqlite3.connect('keywords.db')
     cursor = connection.cursor()
-    data = dict()
+    data = defaultdict(dict)
+    # 86400 == 24h in seconds
+    yesterday = time.time() - 86400
+    send = tuple()
     for keyword in keywords:
         try:
-            cursor.execute(f'select * from keywords where keyword=?',
+            cursor.execute('select * from keywords where keyword=?',
                            (keyword.lower(),))
-            data[keyword] = len(cursor.fetchall())
+            data[keyword]['all'] = len(cursor.fetchall())
+            cursor.execute(f'select * from keywords where keyword=? '
+                           f'and timestamp > {yesterday}',
+                           (keyword.lower(),))
+            data[keyword]['day'] = len(cursor.fetchall())
+            pprint(data.items())
+            send = sorted(data.items(), key=lambda item: item[1]['day'],
+                          reverse=True)
         except sqlite3.OperationalError:
             continue
-    return render_template('index.html', data=data)
+    return render_template('index.html', data=send)
 
 
 if __name__ == '__main__':
