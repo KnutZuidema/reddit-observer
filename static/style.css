@@ -5,14 +5,11 @@ body {
 }
 
 #content {
-    margin-top: 50px;
+    margin-top: 70px;
 }
 
 #champion_table {
     opacity: 0.9;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-top: 20px;
 }
 
 .navbar {
