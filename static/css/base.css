@@ -7,18 +7,6 @@ body {
     margin-top: 70px;
 }
 
-#search {
-    margin: 10px auto;
-    width: 67%;
-}
-
-#champion_table {
-    margin: 10px auto;
-    width: 67%;
-    opacity: 0.9;
-    cursor: pointer;
-}
-
 .navbar {
     border-bottom: 3px solid darkslategrey;
 }

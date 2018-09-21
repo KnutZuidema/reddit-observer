@@ -1,0 +1,11 @@
+#search {
+    margin: 10px auto;
+    width: 67%;
+}
+
+#champion_table {
+    margin: 10px auto;
+    width: 67%;
+    opacity: 0.9;
+    cursor: pointer;
+}
