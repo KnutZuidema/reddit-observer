@@ -49,11 +49,15 @@ async def save():
         cursor = connection.cursor()
         for keyword, times in mentions.items():
             for data in times:
-                cursor.execute('insert into keywords(keyword, timestamp,'
-                               'permalink, subreddit, commenter)'
-                               'values (?, ?, ?, ?, ?)',
-                               (keyword, data['timestamp'], data['permalink'],
-                                data['subreddit'], data['commenter']))
+                try:
+                    cursor.execute('insert into keywords(keyword, timestamp,'
+                                   'permalink, subreddit, commenter)'
+                                   'values (?, ?, ?, ?, ?)',
+                                   (keyword, data['timestamp'],
+                                    data['permalink'],
+                                    data['subreddit'], data['commenter']))
+                except Exception as e:
+                    logging.error(e)
             mentions[keyword] = []
         connection.commit()
         connection.close()
