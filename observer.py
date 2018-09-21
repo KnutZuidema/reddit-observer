@@ -19,6 +19,7 @@ mentions = defaultdict(list)
 
 
 def create_database():
+    logging.debug('created database')
     connection = sqlite3.connect('keywords.db')
     cursor = connection.cursor()
     cursor.execute('create table if not exists keywords('
