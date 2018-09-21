@@ -22,18 +22,18 @@ def occurrences():
     send = tuple()
     for keyword in keywords:
         try:
-            cursor.execute('select * from keywords where keyword=?',
+            cursor.execute('select count(*) from keywords where keyword=?',
                            (keyword.lower(),))
-            data[keyword]['all'] = len(cursor.fetchall())
-            cursor.execute(f'select * from keywords where keyword=? '
+            data[keyword]['all'] = cursor.fetchone()[0]
+            cursor.execute(f'select count(*) from keywords where keyword=? '
                            f'and timestamp > {yesterday}',
                            (keyword.lower(),))
-            data[keyword]['day'] = len(cursor.fetchall())
-            cursor.execute(f'select * from keywords where keyword=? '
+            data[keyword]['day'] = cursor.fetchone()[0]
+            cursor.execute(f'select count(*) from keywords where keyword=? '
                            f'and timestamp between {yesteryesterday} '
                            f'and {yesterday}',
                            (keyword.lower(),))
-            change = data[keyword]['day'] - len(cursor.fetchall())
+            change = data[keyword]['day'] - cursor.fetchone()[0]
             data[keyword]['change'] = change
             send = sorted(data.items(), key=lambda item: item[1]['day'],
                           reverse=True)
