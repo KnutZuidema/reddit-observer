@@ -6,8 +6,15 @@
 {% endblock %}
 {% block content %}
   <div class="container" id="content">
-    <input class="form-control" id="search" type="text"
-           placeholder="Search...">
+    <div class="input-group" id="search">
+      <div class="input-group-prepend">
+        <span class="input-group-text">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
+      <input class="form-control" type="text" id="searchbox"
+             placeholder="Search...">
+    </div>
     <table class="table table-dark table-hover sortable" id="champion_table">
       <thead>
       <tr>
