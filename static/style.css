@@ -1,13 +1,20 @@
 body {
     background: url("https://images4.alphacoders.com/600/thumb-1920-600528.png")no-repeat fixed;
-    background-size: cover; 
+    background-size: cover;
 }
 
 #content {
     margin-top: 70px;
 }
 
+#search {
+    margin: 10px auto;
+    width: 67%;
+}
+
 #champion_table {
+    margin: 10px auto;
+    width: 67%;
     opacity: 0.9;
     cursor: pointer;
 }
