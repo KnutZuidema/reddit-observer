@@ -42,5 +42,9 @@ def occurrences():
     return render_template('index.html', data=send)
 
 
+# @app.route('/create')
+# def create():
+
+
 if __name__ == '__main__':
     app.run(port=8888, debug=True)
