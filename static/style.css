@@ -1,7 +1,6 @@
 body {
-    background-size: cover;
-    background: url("https://images4.alphacoders.com/600/thumb-1920-600528.png")
-                no-repeat fixed;
+    background: url("https://images4.alphacoders.com/600/thumb-1920-600528.png")no-repeat fixed;
+    background-size: cover; 
 }
 
 #content {
