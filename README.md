@@ -6,6 +6,13 @@ If a keyword is mentioned in a comment, that mention will be saved to a SQLite3 
 It also comes with a small Flask web-app for displaying found content  
 See http://observer.knutzuidema.de for an example
 
+## Table of contents
+* [Install](#install)
+* [Configure](#configure)
+..* [Credentials](#credentials)
+..* [Parameters](#parameters)
+* [Run](#run)
+
 ## Install
 
 ```bash
