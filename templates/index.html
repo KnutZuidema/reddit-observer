@@ -26,6 +26,20 @@
       </tr>
       </thead>
       <tbody>
+        <tr>
+          <td scope="row">Total</td>
+          <td scope="row">{{ total.day }}</td>
+          <td scope="row">
+            {% if total.change > 0 %}
+              <span class="badge badge-success">+{{ total.change }}</span>
+            {% elif total.change < 0 %}
+              <span class="badge badge-danger">{{ total.change }}</span>
+            {% else %}
+              <span class="badge badge-secondary">{{ total.change }}</span>
+            {% endif %}
+          </td>
+          <td scope="row">{{ total.all }}</td>
+        </tr>
       {% for champion, mentions in data %}
         <tr id="{{ champion }}">
           <td scope="row">{{ champion|title }}</td>

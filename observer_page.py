@@ -39,7 +39,12 @@ def occurrences():
                           reverse=True)
         except sqlite3.OperationalError:
             continue
-    return render_template('index.html', data=send)
+    total = {
+        'all': sum(keyword['all'] for keyword in data.values()),
+        'day': sum(keyword['day'] for keyword in data.values()),
+        'change': sum(keyword['change'] for keyword in data.values())
+    }
+    return render_template('index.html', data=send, total=total)
 
 
 # @app.route('/create')
