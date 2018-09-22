@@ -9,8 +9,8 @@ See http://observer.knutzuidema.de for an example
 ## Table of contents
 * [Install](#install)
 * [Configure](#configure)
-..* [Credentials](#credentials)
-..* [Parameters](#parameters)
+  * [Credentials](#credentials)
+  * [Parameters](#parameters)
 * [Run](#run)
 
 ## Install
