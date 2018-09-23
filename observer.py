@@ -86,7 +86,7 @@ def observe_keywords(comment):
             continue
         for synonym in synonyms:
             try:
-                if re.search(fr'(^{synonym} )|( {synonym} )|( {synonym}\.)',
+                if re.search(fr'(^{synonym}\s)|(\s{synonym}\s)|(\s{synonym}\.)',
                              comment.body):
                     logging.info(f'Found {keyword} in comment {comment.id}')
                     mentions[keyword] += [{
