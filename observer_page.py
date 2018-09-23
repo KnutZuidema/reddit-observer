@@ -51,8 +51,23 @@ def occurrences():
     return render_template('index.html', data=send, total=total)
 
 
-# @app.route('/create')
-# def create():
+@app.route('/<keyword>')
+def keywords(keyword: str):
+    connection = sqlite3.connect('keywords.db')
+    cursor = connection.cursor()
+    upper = time.time()
+    lower = upper - DAY
+    data = list()
+    for i in range(7):
+        cursor.execute('select count(*) from keywords where '
+                       f'(keyword=? collate nocase) and '
+                       f'timestamp between {lower} and {upper}',
+                       (keyword,))
+        data = [cursor.fetchone()[0]] + data
+        upper = lower - 1
+        lower -= DAY
+    connection.close()
+    return render_template('keyword.html', keyword=keyword, data=data)
 
 
 if __name__ == '__main__':
