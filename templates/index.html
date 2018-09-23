@@ -7,7 +7,8 @@
   <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
 {% block content %}
-    <div class="input-group" id="search">
+  <div class="col-md-12 col-lg-8 mx-auto">
+    <div class="input-group py-1" id="search">
       <div class="input-group-prepend">
         <span class="input-group-text">
           <i class="fas fa-search"></i>
@@ -16,7 +17,8 @@
       <input class="form-control" type="text" id="searchbox"
              placeholder="Search...">
     </div>
-    <table class="table table-responsive table-dark table-hover sort" id="champion_table">
+    <table class="table table-responsive table-dark table-hover py-1 sort"
+           id="champion_table">
       <thead>
       <tr>
         <th scope="col" id="champion">Champion</th>
@@ -52,4 +54,5 @@
       {% endfor %}
       </tbody>
     </table>
+  </div>
 {% endblock %}
