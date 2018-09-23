@@ -73,21 +73,32 @@ async def reload_config():
 
 
 def observe_keywords(comment):
-    for keyword in config['parameters']['keywords']:
-        keyword = keyword.lower()
-        try:
-            if re.search(fr'(^{keyword} )|( {keyword} )|( {keyword}\.)',
-                         comment.body):
-                logging.info(f'Found {keyword} in comment {comment.id}')
-                mentions[keyword] += [{
-                    'timestamp': comment.created,
-                    'permalink': comment.permalink,
-                    'subreddit': comment.subreddit.display_name,
-                    'commenter': comment.author.name
-                }]
-        except AttributeError:
-            logging.debug(f'Comment {comment.id} doesn\'t have a body')
-            break
+    for keyword, synonyms in config['parameters']['keywords'].items():
+        if re.search(fr'(^{keyword} )|( {keyword} )|( {keyword}\.)',
+                     comment.body):
+            logging.info(f'Found {keyword} in comment {comment.id}')
+            mentions[keyword] += [{
+                'timestamp': comment.created,
+                'permalink': comment.permalink,
+                'subreddit': comment.subreddit.display_name,
+                'commenter': comment.author.name
+            }]
+            continue
+        for synonym in synonyms:
+            try:
+                if re.search(fr'(^{synonym} )|( {synonym} )|( {synonym}\.)',
+                             comment.body):
+                    logging.info(f'Found {keyword} in comment {comment.id}')
+                    mentions[keyword] += [{
+                        'timestamp': comment.created,
+                        'permalink': comment.permalink,
+                        'subreddit': comment.subreddit.display_name,
+                        'commenter': comment.author.name
+                    }]
+                    break
+            except AttributeError:
+                logging.debug(f'Comment {comment.id} doesn\'t have a body')
+                break
 
 
 if __name__ == '__main__':

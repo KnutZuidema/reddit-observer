@@ -5,7 +5,7 @@
   },
   "parameters": {
     "subreddits":[],
-    "keywords": [],
+    "keywords": {},
     "save_interval": 30,
     "config_update_interval": 30
   }
