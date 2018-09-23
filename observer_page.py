@@ -23,16 +23,16 @@ def occurrences():
     for keyword in keywords:
         try:
             cursor.execute('select count(*) from keywords where keyword=?',
-                           (keyword.lower(),))
+                           (keyword,))
             data[keyword]['all'] = cursor.fetchone()[0]
             cursor.execute(f'select count(*) from keywords where keyword=? '
                            f'and timestamp > {yesterday}',
-                           (keyword.lower(),))
+                           (keyword,))
             data[keyword]['day'] = cursor.fetchone()[0]
             cursor.execute(f'select count(*) from keywords where keyword=? '
                            f'and timestamp between {yesteryesterday} '
                            f'and {yesterday}',
-                           (keyword.lower(),))
+                           (keyword,))
             change = data[keyword]['day'] - cursor.fetchone()[0]
             data[keyword]['change'] = change
             send = sorted(data.items(), key=lambda item: item[1]['day'],
