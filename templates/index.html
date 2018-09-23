@@ -38,7 +38,7 @@
       <tbody>
       {% for champion, mentions in data %}
         <tr id="{{ champion }}">
-          <td scope="row">{{ champion|title }}</td>
+          <td scope="row"><a href="/{{ champion }}">{{ champion|title }}</a></td>
           <td scope="row">{{ mentions.day }}</td>
           <td scope="row">
             {% if mentions.change > 0 %}

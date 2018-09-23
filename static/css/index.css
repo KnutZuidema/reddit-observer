@@ -2,3 +2,14 @@
     opacity: 0.9;
     cursor: pointer;
 }
+
+a {
+    text-decoration: none;
+    color: unset;
+}
+
+a:hover {
+    text-decoration: none;
+    color: grey;
+    transition: color 200ms;
+}
