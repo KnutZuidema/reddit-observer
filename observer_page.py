@@ -7,6 +7,8 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
+DAY = 86400
+
 
 @app.route('/')
 def occurrences():
@@ -16,9 +18,8 @@ def occurrences():
     connection = sqlite3.connect('keywords.db')
     cursor = connection.cursor()
     data = defaultdict(dict)
-    day = 86400
-    yesterday = time.time() - day
-    yesteryesterday = yesterday - day
+    yesterday = time.time() - DAY
+    yesteryesterday = yesterday - DAY
     send = tuple()
     for keyword in keywords.keys():
         try:
