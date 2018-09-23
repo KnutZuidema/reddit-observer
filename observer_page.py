@@ -20,7 +20,7 @@ def occurrences():
     yesterday = time.time() - day
     yesteryesterday = yesterday - day
     send = tuple()
-    for keyword in keywords:
+    for keyword in keywords.keys():
         try:
             cursor.execute('select count(*) from keywords where keyword=?',
                            (keyword,))
