@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
     $("#searchbox").on("keyup", function () {
         const value = $(this).val().toLowerCase();
         $("#champion_table tbody tr").filter(function () {
