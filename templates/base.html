@@ -36,7 +36,7 @@
               data-target="#navbar">
        <i class="fas fa-bars"></i>
       </button>
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="/">
         <img src="{{ url_for('static', filename='images/favicon.ico') }}" style="width:30px">
         Observer
       </a>
@@ -44,7 +44,7 @@
     <div class="collapse navbar-collapse" id="navbar">
       <div class="navbar-nav">
         {% block navbar_items %}
-        <a class="nav-item nav-link active" href="#">Home</a>
+        <a class="nav-item nav-link active" href="/">Home</a>
         <a class="nav-item nav-link" href="#">About</a>
         <a class="nav-item nav-link" href="#">Contact</a>
         {% endblock %}
