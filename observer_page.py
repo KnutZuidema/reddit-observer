@@ -43,6 +43,7 @@ def occurrences():
                           reverse=True)
         except sqlite3.OperationalError:
             continue
+    connection.close()
     total = {
         'all': sum(keyword['all'] for keyword in data.values()),
         'day': sum(keyword['day'] for keyword in data.values()),
