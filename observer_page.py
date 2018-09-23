@@ -22,14 +22,17 @@ def occurrences():
     send = tuple()
     for keyword in keywords.keys():
         try:
-            cursor.execute('select count(*) from keywords where keyword=?',
+            cursor.execute('select count(*) from keywords '
+                           'where keyword=? collate nocase',
                            (keyword,))
             data[keyword]['all'] = cursor.fetchone()[0]
-            cursor.execute(f'select count(*) from keywords where keyword=? '
+            cursor.execute(f'select count(*) from keywords where '
+                           f'(keyword=?  collate nocase) '
                            f'and timestamp > {yesterday}',
                            (keyword,))
             data[keyword]['day'] = cursor.fetchone()[0]
-            cursor.execute(f'select count(*) from keywords where keyword=? '
+            cursor.execute(f'select count(*) from keywords '
+                           f'where (keyword=?  collate nocase) '
                            f'and timestamp between {yesteryesterday} '
                            f'and {yesterday}',
                            (keyword,))
