@@ -18,7 +18,8 @@ def occurrences():
     connection = sqlite3.connect('keywords.db')
     cursor = connection.cursor()
     data = defaultdict(dict)
-    yesterday = time.time() - DAY
+    now = time.time()
+    yesterday = now - DAY
     yesteryesterday = yesterday - DAY
     send = tuple()
     for keyword in keywords.keys():
@@ -29,7 +30,7 @@ def occurrences():
             data[keyword]['all'] = cursor.fetchone()[0]
             cursor.execute(f'select count(*) from keywords where '
                            f'(keyword=?  collate nocase) '
-                           f'and timestamp > {yesterday}',
+                           f'and timestamp between {yesterday} and {now}',
                            (keyword,))
             data[keyword]['day'] = cursor.fetchone()[0]
             cursor.execute(f'select count(*) from keywords '
@@ -59,7 +60,7 @@ def keywords(keyword: str):
     upper = time.time()
     lower = upper - DAY
     data = list()
-    for i in range(7):
+    for _ in range(7):
         cursor.execute('select count(*) from keywords where '
                        f'(keyword=? collate nocase) and '
                        f'timestamp between {lower} and {upper}',
