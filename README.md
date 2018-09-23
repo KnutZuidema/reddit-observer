@@ -43,7 +43,7 @@ Your client secret
 List of subreddits by their name (without `/r/` in front) that should be observed.
 
 ##### keywords
-List of keywords that should yield a match. These are matched only if they are a separate word in the comment but are not case-sensitive.
+Dictionary with keywords as keys and a list of synonyms as values. Matches on the keyword itself and on any of the synonyms regardless of case, but only if they are a separate word in the comment. Entries in the database will always have the keyword as identifier, not a synonym.
 
 ##### save_interval
 Time in seconds that should pass between each commit to the database.
