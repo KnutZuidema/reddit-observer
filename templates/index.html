@@ -23,14 +23,14 @@
       <tr>
         <th scope="col" id="champion">Champion</th>
         <th scope="col" id="mentions_day">Mentions/24h ({{ total.day }})</th>
-        <th scope="col" id="mentions_change">Change/24h (
+        <th scope="col" id="mentions_change">Change/24h
           {% if total.change > 0 %}
-            <span class="badge badge-success">+{{ total.change }}</span>
+            (<span class="badge badge-success">+{{ total.change }}</span>)
           {% elif total.change < 0 %}
-            <span class="badge badge-danger">{{ total.change }}</span>
+            (<span class="badge badge-danger">{{ total.change }}</span>)
           {% else %}
-            <span class="badge badge-secondary">{{ total.change }}</span>
-          {% endif %})
+            (<span class="badge badge-secondary">{{ total.change }}</span>)
+          {% endif %}
         </th>
         <th scope="col" id="mentions_all">Mentions/All time ({{ total.all }})</th>
       </tr>
