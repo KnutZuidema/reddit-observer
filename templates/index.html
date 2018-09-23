@@ -3,7 +3,7 @@
   {{ super() }}
   <link rel="stylesheet"
         href="{{ url_for('static', filename='css/index.css') }}">
-  <script src="{{ url_for('static', filename='js/sorttable.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/sort.js') }}"></script>
   <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
 {% block content %}
@@ -16,7 +16,7 @@
       <input class="form-control" type="text" id="searchbox"
              placeholder="Search...">
     </div>
-    <table class="table table-dark table-hover sortable" id="champion_table">
+    <table class="table table-dark table-hover sort" id="champion_table">
       <thead>
       <tr>
         <th scope="col" id="champion">Champion</th>
