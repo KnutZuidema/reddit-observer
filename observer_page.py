@@ -1,9 +1,9 @@
-from flask import Flask, render_template
 import json
 import sqlite3
-from collections import defaultdict
 import time
-from pprint import pprint
+from collections import defaultdict
+
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
