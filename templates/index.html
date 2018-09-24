@@ -7,7 +7,7 @@
   <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
 {% block content %}
-  <div class="col-md-12 col-lg-8 mx-auto">
+  <div class="table-responsive col-lg-8 mx-auto">
     <div class="input-group py-1" id="search">
       <div class="input-group-prepend">
         <span class="input-group-text">
@@ -17,7 +17,7 @@
       <input class="form-control" type="text" id="searchbox"
              placeholder="Search...">
     </div>
-    <table class="table table-responsive table-dark table-hover py-1 sort"
+    <table class="table table-dark table-hover py-1 sort"
            id="champion_table">
       <thead>
       <tr>
