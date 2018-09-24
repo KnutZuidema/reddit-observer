@@ -9,13 +9,14 @@ app = Flask(__name__)
 DAY = 86400
 
 
-def utc_timestamp(cursor: sqlite3.Cursor):
+def max_timestamp(cursor: sqlite3.Cursor):
     cursor.execute('select max(timestamp) from keywords')
     return cursor.fetchone()[0]
 
 
-def count_between(cursor: sqlite3.Cursor, keyword, lower: int = 0, upper: int = None):
-    upper = upper or utc_timestamp(cursor)
+def count_between(cursor: sqlite3.Cursor, keyword, lower: int = 0,
+                  upper: int = None):
+    upper = upper or max_timestamp(cursor)
     cursor.execute(f'select count(*) from keywords where '
                    f'(keyword=?  collate nocase) '
                    f'and timestamp between {lower} and {upper}',
@@ -31,7 +32,7 @@ def occurrences():
     connection = sqlite3.connect('keywords.db')
     cursor = connection.cursor()
     data = defaultdict(dict)
-    now = utc_timestamp(cursor)
+    now = max_timestamp(cursor)
     yesterday = now - DAY
     yesteryesterday = yesterday - DAY
     send = tuple()
@@ -61,7 +62,7 @@ def occurrences():
 def keywords(keyword: str):
     connection = sqlite3.connect('keywords.db')
     cursor = connection.cursor()
-    upper = utc_timestamp(cursor)
+    upper = max_timestamp(cursor)
     lower = upper - DAY
     data = list()
     for _ in range(7):
