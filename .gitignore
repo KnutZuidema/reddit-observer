@@ -3,4 +3,4 @@ backup_config.json
 venv
 observer.log
 observer_page.log
-keywords.db
+*.db

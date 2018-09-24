@@ -1,9 +1,9 @@
 import json
-from collections import defaultdict
 import logging
 import re
-from asyncio import sleep, get_event_loop, gather
 import sqlite3
+from asyncio import sleep, get_event_loop, gather
+from collections import defaultdict
 
 from praw import Reddit
 
@@ -92,7 +92,7 @@ def observe_keywords(comment):
                         logging.info(f'Found {keyword} by synonym {synonym} '
                                      f'in comment {comment.id}')
                         mentions[keyword] += [{
-                            'timestamp': comment.created,
+                            'timestamp': comment.created_utc,
                             'permalink': comment.permalink,
                             'subreddit': comment.subreddit.display_name,
                             'commenter': comment.author.name
