@@ -98,8 +98,8 @@ def observe_keywords(comment):
                             'commenter': comment.author.name
                         }]
                         break
-        except AttributeError:
-            logging.debug(f'Comment {comment.id} doesn\'t have a body')
+        except Exception as e:
+            logging.error(e)
             break
 
 
