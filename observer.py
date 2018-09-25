@@ -79,7 +79,7 @@ def observe_keywords(comment):
                          comment.body):
                 logging.info(f'Found {keyword} in comment {comment.id}')
                 mentions[keyword] += [{
-                    'timestamp': comment.created,
+                    'timestamp': comment.created_utc,
                     'permalink': comment.permalink,
                     'subreddit': comment.subreddit.display_name,
                     'commenter': comment.author.name
