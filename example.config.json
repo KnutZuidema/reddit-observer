@@ -4,9 +4,15 @@
     "client_secret": "your secret"
   },
   "parameters": {
-    "subreddits":[],
+    "subreddits": [],
     "keywords": {},
     "save_interval": 30,
     "config_update_interval": 30
+  },
+  "database": {
+    "sqlalchemy.url": "sqlite:///keywords.db",
+    "sqlalchemy.case_sensitive": false,
+    "sqlalchemy.echo": false,
+    "sqlalchemy.logging_name": "keywords"
   }
 }
