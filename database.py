@@ -19,8 +19,7 @@ def get_session(config: dict) -> Session:
     return session_creator()
 
 
-def get_max(session: Session,
-            column: Union[QueryableAttribute, Type['Keyword']]) -> Any:
+def get_max(session: Session, column: Union[QueryableAttribute, Type['Keyword']]) -> Any:
     return session.query(func.max(column)).first()[0]
 
 
@@ -31,10 +30,9 @@ def counts(session: Session, column: Union[QueryableAttribute, Type['Keyword']])
 
 def count(session: Session,
           column: Union[QueryableAttribute, Type['Keyword']],
-          comparison: Any = None) -> int:
+          comparison: Any) -> int:
     query = session.query(column)
-    if comparison:
-        query = query.filter(column.collate('nocase') == comparison)
+    query = query.filter(column.collate('nocase') == comparison)
     return query.count()
 
 
@@ -50,10 +48,9 @@ def counts_between(
 
 def count_between(session: Session,
                   column: Union[QueryableAttribute, Type['Keyword']],
-                  lower: int, upper: int, comparison: Any = None) -> int:
+                  lower: int, upper: int, comparison: Any) -> int:
     query = session.query(column)
-    if comparison:
-        query = query.filter(column.collate('nocase') == comparison)
+    query = query.filter(column.collate('nocase') == comparison)
     return query.filter(Keyword.timestamp.between(lower, upper)).count()
 
 
