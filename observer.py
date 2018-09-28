@@ -11,13 +11,6 @@ from database import Keyword, get_session
 logging.basicConfig(filename='observer.log', level=logging.INFO, filemode='w',
                     format='%(asctime)s:%(levelname)s: %(message)s')
 
-with open('config.json') as file:
-    config = json.load(file)
-reddit = Reddit(client_id=config['credentials']['client_id'],
-                client_secret=config['credentials']['client_secret'],
-                user_agent='Reddit Observer v0.1 by SgtBlackScorp')
-mentions = defaultdict(list)
-
 
 async def observe(subreddit: str):
     while True:
@@ -75,6 +68,12 @@ def observe_keywords(comment):
 
 
 if __name__ == '__main__':
+    with open('config.json') as file:
+        config = json.load(file)
+    reddit = Reddit(client_id=config['credentials']['client_id'],
+                    client_secret=config['credentials']['client_secret'],
+                    user_agent='Reddit Observer v0.1 by SgtBlackScorp')
+    mentions = defaultdict(list)
     session = get_session(config['database'])
     try:
         loop = get_event_loop()
