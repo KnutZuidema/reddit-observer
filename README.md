@@ -11,6 +11,7 @@ See http://observer.knutzuidema.de for an example
 * [Configure](#configure)
   * [Credentials](#credentials)
   * [Parameters](#parameters)
+  * [Database](#database)
 * [Run](#run)
 
 ## Install
@@ -51,6 +52,9 @@ Time in seconds that should pass between each commit to the database.
 ##### config_update_interval
 Time in seconds that should pass between each reload of the config file.  
 Updates will only take effect after the config file was reloaded.
+
+### Database
+See [SQLAlchemy's docs](https://docs.sqlalchemy.org/en/latest/core/engines.html) for more information
 
 ## Run
 ```bash
