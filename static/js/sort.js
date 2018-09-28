@@ -17,8 +17,8 @@ $(function () {
         if (!header.hasClass('sorted-ascending')){
             body_rows.reverse();
         }
-        for (let item in body_rows){
-            $('.sort tbody').append(body_rows[item]);
+        for (let item of body_rows){
+            $('.sort tbody').append(item);
         }
     })
 });
