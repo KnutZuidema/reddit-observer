@@ -54,7 +54,8 @@ def keywords(keyword: str):
     lower = upper - DAY
     data = list()
     for _ in range(7):
-        data = [count_between(session, Keyword.keyword, lower, upper, keyword)] + data
+        data = [count_between(session, Keyword.keyword, lower, upper,
+                              keyword)] + data
         upper = lower - 1
         lower -= DAY
     return render_template('keyword.html', keyword=keyword, data=data)
