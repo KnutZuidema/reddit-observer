@@ -1,4 +1,4 @@
-from typing import Union, Any, Type
+from typing import Union, Any, Type, Dict
 
 from sqlalchemy import engine_from_config, Column, Integer, String, func
 from sqlalchemy.engine.base import Engine
@@ -24,6 +24,11 @@ def get_max(session: Session,
     return session.query(func.max(column)).first()[0]
 
 
+def counts(session: Session, column: Union[QueryableAttribute, Type['Keyword']]) -> Dict[str, int]:
+    query = session.query(column, func.count(column)).group_by(column)
+    return dict(query)
+
+
 def count(session: Session,
           column: Union[QueryableAttribute, Type['Keyword']],
           comparison: Any = None) -> int:
@@ -31,6 +36,16 @@ def count(session: Session,
     if comparison:
         query = query.filter(column.collate('nocase') == comparison)
     return query.count()
+
+
+def counts_between(
+        session: Session,
+        column: Union[QueryableAttribute, Type['Keyword']],
+        lower: int, upper: int) -> Dict[str, int]:
+    query = session.query(column, func.count(column))
+    query = query.filter(Keyword.timestamp.between(lower, upper))
+    query = query.group_by(Keyword.keyword)
+    return dict(query)
 
 
 def count_between(session: Session,
