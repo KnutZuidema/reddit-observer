@@ -1,7 +1,10 @@
-from sqlalchemy import engine_from_config, Column, Integer, String
+from typing import Union, Any, Type
+
+from sqlalchemy import engine_from_config, Column, Integer, String, func
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm.attributes import QueryableAttribute
 
 engine: Engine = None
 session_creator: sessionmaker = None
@@ -14,6 +17,29 @@ def get_session(config: dict) -> Session:
     if not session_creator:
         session_creator = sessionmaker(bind=engine)
     return session_creator()
+
+
+def get_max(session: Session,
+            column: Union[QueryableAttribute, Type['Keyword']]) -> Any:
+    return session.query(func.max(column)).first()[0]
+
+
+def count(session: Session,
+          column: Union[QueryableAttribute, Type['Keyword']],
+          comparison: Any = None) -> int:
+    query = session.query(column)
+    if comparison:
+        query = query.filter(column.collate('nocase') == comparison)
+    return query.count()
+
+
+def count_between(session: Session,
+                  column: Union[QueryableAttribute, Type['Keyword']],
+                  lower: int, upper: int, comparison: Any = None) -> int:
+    query = session.query(column)
+    if comparison:
+        query = query.filter(column.collate('nocase') == comparison)
+    return query.filter(Keyword.timestamp.between(lower, upper)).count()
 
 
 Base = declarative_base()
