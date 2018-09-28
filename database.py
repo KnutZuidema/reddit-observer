@@ -28,26 +28,22 @@ def counts(session: Session, column: Union[QueryableAttribute, Type['Keyword']])
     return dict(query)
 
 
-def count(session: Session,
-          column: Union[QueryableAttribute, Type['Keyword']],
+def count(session: Session, column: Union[QueryableAttribute, Type['Keyword']],
           comparison: Any) -> int:
     query = session.query(column)
     query = query.filter(column.collate('nocase') == comparison)
     return query.count()
 
 
-def counts_between(
-        session: Session,
-        column: Union[QueryableAttribute, Type['Keyword']],
-        lower: int, upper: int) -> Dict[str, int]:
+def counts_between(session: Session, column: Union[QueryableAttribute, Type['Keyword']],
+                   lower: int, upper: int) -> Dict[str, int]:
     query = session.query(column, func.count(column))
     query = query.filter(Keyword.timestamp.between(lower, upper))
     query = query.group_by(Keyword.keyword)
     return dict(query)
 
 
-def count_between(session: Session,
-                  column: Union[QueryableAttribute, Type['Keyword']],
+def count_between(session: Session, column: Union[QueryableAttribute, Type['Keyword']],
                   lower: int, upper: int, comparison: Any) -> int:
     query = session.query(column)
     query = query.filter(column.collate('nocase') == comparison)
