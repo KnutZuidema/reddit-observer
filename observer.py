@@ -1,11 +1,12 @@
 import json
 import logging
 import re
-import sqlite3
 from asyncio import sleep, get_event_loop, gather
 from collections import defaultdict
 
 from praw import Reddit
+
+from database import Keyword, get_session
 
 logging.basicConfig(filename='observer.log', level=logging.INFO, filemode='w',
                     format='%(asctime)s:%(levelname)s: %(message)s')
@@ -16,21 +17,6 @@ reddit = Reddit(client_id=config['credentials']['client_id'],
                 client_secret=config['credentials']['client_secret'],
                 user_agent='Reddit Observer v0.1 by SgtBlackScorp')
 mentions = defaultdict(list)
-
-
-def create_database():
-    logging.debug('created database')
-    connection = sqlite3.connect('keywords.db')
-    cursor = connection.cursor()
-    cursor.execute('create table if not exists keywords('
-                   'id integer primary key autoincrement,'
-                   'keyword text,'
-                   'timestamp integer,'
-                   'permalink text,'
-                   'subreddit text,'
-                   'commenter text)')
-    connection.commit()
-    connection.close()
 
 
 async def observe(subreddit: str):
@@ -45,22 +31,7 @@ async def observe(subreddit: str):
 
 async def save():
     while True:
-        connection = sqlite3.connect('keywords.db')
-        cursor = connection.cursor()
-        for keyword, times in mentions.items():
-            for data in times:
-                try:
-                    cursor.execute('insert into keywords(keyword, timestamp,'
-                                   'permalink, subreddit, commenter)'
-                                   'values (?, ?, ?, ?, ?)',
-                                   (keyword, data['timestamp'],
-                                    data['permalink'],
-                                    data['subreddit'], data['commenter']))
-                except Exception as e:
-                    logging.error(e)
-            mentions[keyword] = []
-        connection.commit()
-        connection.close()
+        session.commit()
         await sleep(config['parameters']['save_interval'])
 
 
@@ -78,33 +49,33 @@ def observe_keywords(comment):
             if re.search(fr'(^{keyword} )|( {keyword} )|( {keyword}\.)',
                          comment.body):
                 logging.info(f'Found {keyword} in comment {comment.id}')
-                mentions[keyword] += [{
-                    'timestamp': int(comment.created_utc),
-                    'permalink': comment.permalink,
-                    'subreddit': comment.subreddit.display_name,
-                    'commenter': comment.author.name
-                }]
+                session.add(
+                    Keyword(timestamp=int(comment.created_utc),
+                            permalink=comment.permalink,
+                            subreddit=comment.subreddit.display_name,
+                            commenter=comment.author.name)
+                )
                 continue
             for synonym in synonyms:
-                    if re.search(fr'(^{synonym}\s)|(\s{synonym}\s)|'
-                                 fr'(\s{synonym}\.)',
-                                 comment.body):
-                        logging.info(f'Found {keyword} by synonym {synonym} '
-                                     f'in comment {comment.id}')
-                        mentions[keyword] += [{
-                            'timestamp': int(comment.created_utc),
-                            'permalink': comment.permalink,
-                            'subreddit': comment.subreddit.display_name,
-                            'commenter': comment.author.name
-                        }]
-                        break
+                if re.search(fr'(^{synonym}\s)|(\s{synonym}\s)|'
+                             fr'(\s{synonym}\.)',
+                             comment.body):
+                    logging.info(f'Found {keyword} by synonym {synonym} '
+                                 f'in comment {comment.id}')
+                    session.add(
+                        Keyword(timestamp=int(comment.created_utc),
+                                permalink=comment.permalink,
+                                subreddit=comment.subreddit.display_name,
+                                commenter=comment.author.name)
+                    )
+                    break
         except Exception as e:
             logging.error(e)
             break
 
 
 if __name__ == '__main__':
-    create_database()
+    session = get_session(config['database'])
     try:
         loop = get_event_loop()
         subreddit_coroutines = [observe(subreddit) for subreddit
