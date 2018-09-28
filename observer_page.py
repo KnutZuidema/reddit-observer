@@ -1,10 +1,10 @@
 import json
-from collections import defaultdict
+from datetime import datetime
+from itertools import zip_longest
 
-import sqlalchemy.exc
 from flask import Flask, render_template
 
-from database import get_session, Keyword, get_max, count, count_between
+from database import get_session, Keyword, get_max, counts, counts_between, count_between
 
 app = Flask(__name__)
 
@@ -15,34 +15,27 @@ DAY = 86400
 def occurrences():
     with open('config.json') as file:
         config = json.load(file)
-    keywords = config['parameters']['keywords']
     session = get_session(config['database'])
-    data = defaultdict(dict)
-    now = get_max(session, Keyword.timestamp)
-    yesterday = now - DAY
-    yesteryesterday = yesterday - DAY
-    send = tuple()
-    for keyword in keywords.keys():
-        try:
-            data[keyword]['all'] = count(session, Keyword.keyword, keyword)
-            data[keyword]['day'] = count_between(session, Keyword.keyword,
-                                                 yesterday, now, keyword)
-            change = data[keyword]['day'] - count_between(session,
-                                                          Keyword.keyword,
-                                                          yesteryesterday,
-                                                          yesterday, keyword)
-            data[keyword]['change'] = change
-            send = sorted(data.items(), key=lambda item: item[1]['day'],
-                          reverse=True)
-        except sqlalchemy.exc.OperationalError:
-            continue
+    now = int(datetime.utcnow().timestamp())
+    data = dict()
+    all_all_time = counts(session, Keyword.keyword)
+    all_today = counts_between(session, Keyword.keyword, now - DAY, now)
+    all_yesterday = counts_between(session, Keyword.keyword, now - 2 * DAY, now - DAY)
+    for (keyword, all_time), today, yesterday in zip_longest(all_all_time.items(),
+                                                             all_today.values(),
+                                                             all_yesterday.values(), fillvalue=0):
+        data[keyword] = {
+            'all': all_time,
+            'day': today,
+            'change': today - yesterday
+        }
+
     total = {
-        'all': count(session, Keyword),
-        'day': count_between(session, Keyword, yesterday, now)
+        'all': sum(keyword['all'] for keyword in data.values()),
+        'day': sum(keyword['day'] for keyword in data.values()),
+        'change': sum(keyword['change'] for keyword in data.values())
     }
-    total['change'] = total['day'] - count_between(session, Keyword,
-                                                   yesteryesterday, yesterday)
-    return render_template('index.html', data=send, total=total)
+    return render_template('index.html', data=data, total=total)
 
 
 @app.route('/<keyword>')
