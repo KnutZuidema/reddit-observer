@@ -1,11 +1,19 @@
 from sqlalchemy import engine_from_config, Column, Integer, String
+from sqlalchemy.engine.base import Engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
+
+engine: Engine = None
+session_creator: sessionmaker = None
 
 
-def get_session(config):
-    engine = engine_from_config(config)
-    return sessionmaker(bind=engine)
+def get_session(config: dict) -> Session:
+    global engine, session_creator
+    if not engine:
+        engine = engine_from_config(config)
+    if not session_creator:
+        session_creator = sessionmaker(bind=engine)
+    return session_creator()
 
 
 Base = declarative_base()
