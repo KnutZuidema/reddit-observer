@@ -43,7 +43,8 @@ def observe_keywords(comment):
                          comment.body):
                 logging.info(f'Found {keyword} in comment {comment.id}')
                 session.add(
-                    Keyword(timestamp=int(comment.created_utc),
+                    Keyword(keyword=keyword,
+                            timestamp=int(comment.created_utc),
                             permalink=comment.permalink,
                             subreddit=comment.subreddit.display_name,
                             commenter=comment.author.name)
@@ -56,7 +57,8 @@ def observe_keywords(comment):
                     logging.info(f'Found {keyword} by synonym {synonym} '
                                  f'in comment {comment.id}')
                     session.add(
-                        Keyword(timestamp=int(comment.created_utc),
+                        Keyword(keyword=keyword,
+                                timestamp=int(comment.created_utc),
                                 permalink=comment.permalink,
                                 subreddit=comment.subreddit.display_name,
                                 commenter=comment.author.name)
