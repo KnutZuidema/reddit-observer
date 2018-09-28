@@ -38,9 +38,10 @@ def occurrences():
             continue
     total = {
         'all': count(session, Keyword),
-        'day': count_between(session, Keyword, yesterday, now),
-        'change': count_between(session, Keyword, yesteryesterday, yesterday)
+        'day': count_between(session, Keyword, yesterday, now)
     }
+    total['change'] = total['day'] - count_between(session, Keyword,
+                                                   yesteryesterday, yesterday)
     return render_template('index.html', data=send, total=total)
 
 
