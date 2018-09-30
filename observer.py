@@ -2,7 +2,6 @@ import json
 import logging
 import re
 from asyncio import sleep, get_event_loop, gather
-from collections import defaultdict
 
 from praw import Reddit
 
@@ -66,13 +65,11 @@ if __name__ == '__main__':
     reddit = Reddit(client_id=config['credentials']['client_id'],
                     client_secret=config['credentials']['client_secret'],
                     user_agent='Reddit Observer v0.1 by SgtBlackScorp')
-    mentions = defaultdict(list)
     session = get_session(config['database'])
     try:
         loop = get_event_loop()
         subreddit_coroutines = [observe(subreddit) for subreddit
                                 in config['parameters']['subreddits']]
-        loop.run_until_complete(
-            gather(*subreddit_coroutines, save(), reload_config()))
+        loop.run_until_complete(gather(*subreddit_coroutines, save(), reload_config()))
     except KeyboardInterrupt:
         logging.info('Keyboard interrupt, shutting down')
