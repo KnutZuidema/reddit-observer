@@ -13,7 +13,7 @@ $(function () {
                 'Today',
             ],
             datasets: [{
-                label: "Mentions last week",
+                label: "Mentions",
                 backgroundColor: 'darkslategrey',
                 data: data
             }]
