@@ -14,12 +14,15 @@ logging.basicConfig(filename='observer.log', level=logging.INFO, filemode='w',
 
 async def observe(subreddit: str):
     while True:
-        for comment in reddit.subreddit(subreddit).stream.comments(
-                pause_after=2):
-            if comment is None:
-                await sleep(5)
-                continue
-            observe_keywords(comment)
+        try:
+            for comment in reddit.subreddit(subreddit).stream.comments(
+                    pause_after=2):
+                if comment is None:
+                    await sleep(5)
+                    continue
+                observe_keywords(comment)
+        except Exception as error:
+            logging.error(error)
 
 
 async def save():
