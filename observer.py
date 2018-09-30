@@ -5,7 +5,7 @@ from asyncio import sleep, get_event_loop, gather
 
 from praw import Reddit
 
-from database import Keyword, get_session
+from database import Mention, get_session
 
 logging.basicConfig(filename='observer.log', level=logging.INFO, filemode='w',
                     format='%(asctime)s:%(levelname)s: %(message)s')
@@ -41,7 +41,7 @@ def observe_keywords(comment):
     for keyword, synonyms in config['parameters']['keywords'].items():
         if re.search(fr'(^{keyword}\s)|(\s{keyword}\s)|(\s{keyword}\.)', comment.body):
             logging.info(f'Found {keyword} in comment {comment.id}')
-            session.add(Keyword(keyword=keyword,
+            session.add(Mention(keyword=keyword,
                                 timestamp=int(comment.created_utc),
                                 permalink=comment.permalink,
                                 subreddit=comment.subreddit.display_name,
@@ -50,7 +50,7 @@ def observe_keywords(comment):
         for synonym in synonyms:
             if re.search(fr'(^{synonym}\s)|(\s{synonym}\s)|(\s{synonym}\.)', comment.body):
                 logging.info(f'Found {keyword} by synonym {synonym} in comment {comment.id}')
-                session.add(Keyword(keyword=keyword,
+                session.add(Mention(keyword=keyword,
                                     timestamp=int(comment.created_utc),
                                     permalink=comment.permalink,
                                     subreddit=comment.subreddit.display_name,
