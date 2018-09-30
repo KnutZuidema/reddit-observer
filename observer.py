@@ -14,8 +14,7 @@ logging.basicConfig(filename='observer.log', level=logging.INFO, filemode='w',
 async def observe(subreddit: str):
     while True:
         try:
-            for comment in reddit.subreddit(subreddit).stream.comments(
-                    pause_after=2):
+            for comment in reddit.subreddit(subreddit).stream.comments(pause_after=2):
                 if comment is None:
                     await sleep(5)
                     continue
