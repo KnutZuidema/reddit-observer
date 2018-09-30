@@ -38,35 +38,23 @@ async def reload_config():
 
 def observe_keywords(comment):
     for keyword, synonyms in config['parameters']['keywords'].items():
-        try:
-            if re.search(fr'(^{keyword} )|( {keyword} )|( {keyword}\.)',
-                         comment.body):
-                logging.info(f'Found {keyword} in comment {comment.id}')
-                session.add(
-                    Keyword(keyword=keyword,
-                            timestamp=int(comment.created_utc),
-                            permalink=comment.permalink,
-                            subreddit=comment.subreddit.display_name,
-                            commenter=comment.author.name)
-                )
-                continue
-            for synonym in synonyms:
-                if re.search(fr'(^{synonym}\s)|(\s{synonym}\s)|'
-                             fr'(\s{synonym}\.)',
-                             comment.body):
-                    logging.info(f'Found {keyword} by synonym {synonym} '
-                                 f'in comment {comment.id}')
-                    session.add(
-                        Keyword(keyword=keyword,
+        if re.search(fr'(^{keyword}\s)|(\s{keyword}\s)|(\s{keyword}\.)', comment.body):
+            logging.info(f'Found {keyword} in comment {comment.id}')
+            session.add(Keyword(keyword=keyword,
                                 timestamp=int(comment.created_utc),
                                 permalink=comment.permalink,
                                 subreddit=comment.subreddit.display_name,
-                                commenter=comment.author.name)
-                    )
-                    break
-        except Exception as e:
-            logging.error(e)
-            break
+                                commenter=comment.author.name))
+            continue
+        for synonym in synonyms:
+            if re.search(fr'(^{synonym}\s)|(\s{synonym}\s)|(\s{synonym}\.)', comment.body):
+                logging.info(f'Found {keyword} by synonym {synonym} in comment {comment.id}')
+                session.add(Keyword(keyword=keyword,
+                                    timestamp=int(comment.created_utc),
+                                    permalink=comment.permalink,
+                                    subreddit=comment.subreddit.display_name,
+                                    commenter=comment.author.name))
+                break
 
 
 if __name__ == '__main__':
