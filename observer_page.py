@@ -4,7 +4,7 @@ from itertools import zip_longest
 
 from flask import Flask, render_template
 
-from database import get_session, Mention, get_max, counts, counts_between, count_between
+from database import get_session, Mention, counts, counts_between, count_between
 
 app = Flask(__name__)
 
@@ -43,7 +43,7 @@ def keywords(keyword: str):
     with open('config.json') as file:
         config = json.load(file)
     session = get_session(config['database'])
-    upper = get_max(session, Mention.timestamp)
+    upper = int(datetime.utcnow().timestamp())
     lower = upper - DAY
     data = list()
     for _ in range(7):
