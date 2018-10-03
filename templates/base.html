@@ -1,66 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{% block header %}
-  <meta charset="UTF-8">
-  <title>{% block title %}Observer{% endblock %}</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-  <link rel="stylesheet"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
-  <link rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-        crossorigin="anonymous">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-          crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-          integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-          crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-          integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-          crossorigin="anonymous"></script>
-{% endblock %}
+  {% block header %}
+    <meta charset="UTF-8">
+    <title>{% block title %}Observer{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+  {% endblock %}
 </head>
 <body>
 {% block navbar %}
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggler" data-toggle="collapse"
-              data-target="#navbar">
-       <i class="fas fa-bars"></i>
-      </button>
-      <a class="navbar-brand" href="/">
-        <img src="{{ url_for('static', filename='images/favicon.ico') }}" style="width:30px">
-        Observer
-      </a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar">
-      <div class="navbar-nav">
-        {% block navbar_items %}
-        <a class="nav-item nav-link active" href="/">Home</a>
-        <a class="nav-item nav-link" href="#">About</a>
-        <a class="nav-item nav-link" href="#">Contact</a>
-        {% endblock %}
+  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar">
+          <i class="fas fa-bars"></i>
+        </button>
+        <a class="navbar-brand" href="/">
+          <img src="{{ url_for('static', filename='images/favicon.ico') }}" style="width:30px">
+          Observer
+        </a>
       </div>
-      <div class="navbar-nav ml-auto">
+      <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-nav">
+          {% block navbar_items %}
+            <a class="nav-item nav-link active" href="/">Home</a>
+            <a class="nav-item nav-link" href="#">About</a>
+            <a class="nav-item nav-link" href="#">Contact</a>
+          {% endblock %}
+        </div>
+        <div class="navbar-nav ml-auto">
           <a class="nav-item nav-link" href="https://github.com/KnutZuidema">
             <i class="fab fa-github"> KnutZuidema</i>
           </a>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 {% endblock %}
 <div class="container" id="content">
-{% block content %}
-{% endblock %}
+  {% block content %}
+  {% endblock %}
 </div>
 </body>
 </html>

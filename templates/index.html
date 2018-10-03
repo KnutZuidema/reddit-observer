@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 {% block header %}
   {{ super() }}
-  <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
   <script src="{{ url_for('static', filename='js/sort.js') }}"></script>
   <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
