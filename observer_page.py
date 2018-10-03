@@ -1,6 +1,5 @@
 import json
 from datetime import datetime
-from itertools import zip_longest
 
 from flask import Flask, render_template
 
@@ -16,16 +15,14 @@ def occurrences():
     session = SQLSession(config['database'])
     now = int(datetime.utcnow().timestamp())
     data = dict()
-    all_all_time = session.counts(Mention.keyword)
-    all_today = session.counts_between(Mention.keyword, now - DAY, now)
-    all_yesterday = session.counts_between(Mention.keyword, now - 2 * DAY, now - DAY)
-    for (keyword, all_time), today, yesterday in zip_longest(all_all_time.items(),
-                                                             all_today.values(),
-                                                             all_yesterday.values(), fillvalue=0):
+    all_time = session.counts(Mention.keyword)
+    today = session.counts_between(Mention.keyword, now - DAY, now)
+    yesterday = session.counts_between(Mention.keyword, now - 2 * DAY, now - DAY)
+    for keyword in all_time.keys():
         data[keyword] = {
-            'all': all_time,
-            'day': today,
-            'change': today - yesterday
+            'all': all_time.get(keyword, 0),
+            'day': today.get(keyword, 0),
+            'change': today.get(keyword, 0) - yesterday.get(keyword, 0)
         }
 
     total = {
