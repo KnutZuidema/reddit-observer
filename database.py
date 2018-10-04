@@ -53,6 +53,12 @@ class SQLSession:
             submissions[(link, title)] += 1
         return [(link, title, mentions) for (link, title), mentions in submissions.items()]
 
+    def get_commenters(self, keyword: str) -> List[Tuple[str, int]]:
+        query = self.session.query(Mention.commenter, func.count(Mention.commenter))
+        query = query.filter(Mention.keyword.collate('nocase') == keyword)
+        query = query.group_by(Mention.commenter)
+        return list(query)
+
 
 Base = declarative_base()
 
