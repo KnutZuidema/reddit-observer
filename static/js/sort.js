@@ -12,7 +12,9 @@ $(function () {
                 item1 = parseInt(item1);
                 item2 = parseInt(item2);
             }
-            return item1 < item2
+            if (item1 < item2) return -1;
+            if (item1 > item2) return 1;
+            return 0;
         });
         if (!header.hasClass('sorted-ascending')){
             body_rows.reverse();
