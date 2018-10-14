@@ -44,8 +44,11 @@ def keywords(keyword: str):
         data = [session.count_between(Mention.keyword, lower, upper, keyword)] + data
         upper = lower - 1
         lower -= DAY
+    submissions = session.get_submissions(keyword)
+    commenters = session.get_commenters(keyword)
     session.close()
-    return render_template('keyword.html', keyword=keyword, data=data)
+    return render_template('keyword.html', keyword=keyword, data=data, submissions=submissions,
+                           commenters=commenters)
 
 
 if __name__ == '__main__':
