@@ -48,8 +48,8 @@ class SQLSession:
         query = query.filter(Mention.keyword.collate('nocase') == keyword)
         submissions = defaultdict(int)
         for permalink in query:
-            link = permalink.rsplit('/', maxsplit=2)[0]
-            title = permalink.split('/')[4].replace('_', ' ')
+            link = permalink[0].rsplit('/', maxsplit=2)[0]
+            title = permalink[0].split('/')[5].replace('_', ' ')
             submissions[(link, title)] += 1
         return [(link, title, mentions) for (link, title), mentions in submissions.items()]
 
