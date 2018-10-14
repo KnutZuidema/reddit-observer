@@ -13,3 +13,8 @@ a:hover {
     color: grey;
     transition: color 200ms;
 }
+
+table i {
+    color: grey;
+    width: 10px;
+}
