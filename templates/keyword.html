@@ -4,14 +4,57 @@
 {% endblock %}
 {% block header %}
   {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
   <script>
-    let data = {{ data|tojson }};
+      let data = {{ data|tojson }};
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
   <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
 {% endblock %}
 {% block content %}
-  <div class="chart-container mx-auto bg-dark text-warning">
-    <canvas id="mentions"></canvas>
+  <div class="row">
+    <div class="col-8 mx-auto">
+      <div class="chart-container bg-dark">
+        <canvas id="mentions"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="row py-2">
+    <div class="table-responsive col-4 ml-auto">
+      <table class="table table-dark table-hover sort">
+        <thead>
+        <tr>
+          <th>Submission <i class="fas"></i></th>
+          <th>Mentions <i class="fas"></i></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for (link, title, mentions) in submissions %}
+          <tr>
+            <td><a href="https://reddit.com{{ link }}">{{ title }}</a></td>
+            <td>{{ mentions }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive col-4 mr-auto">
+      <table class="table table-dark table-hover sort">
+        <thead>
+        <tr>
+          <th>Commenter <i class="fas"></i></th>
+          <th>Mentions <i class="fas"></i></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for (commenter, mentions) in commenters %}
+          <tr>
+            <td><a href="https://reddit.com/u/{{ commenter }}">{{ commenter }}</a></td>
+            <td>{{ mentions }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}
