@@ -1,12 +1,15 @@
 $(function () {
     let headers = $('.sort > thead > tr > th');
-    let body_rows = $('.sort > tbody > tr').get();
     let icons = $('.sort > thead > tr > th > i');
     headers.click(function () {
+        let table = $(this).parents('table');
+        let body_rows = table.find('tbody > tr').get();
+        let table_headers = table.find('thead > tr > th');
         let header = $(this);
+        let index = table_headers.index(header);
+        let icons = table_headers.find('i');
+        let icon = header.find('i');
         header.toggleClass('sorted-ascending');
-        let index = headers.index(header);
-        let icon = $(icons[index]);
         icons.removeClass('fa-caret-up');
         icons.removeClass('fa-caret-down');
         body_rows.sort(function (item1, item2) {
@@ -27,7 +30,7 @@ $(function () {
             icon.addClass('fa-caret-down');
         }
         for (let item of body_rows){
-            $('.sort tbody').append(item);
+            table.find('tbody').append(item);
         }
     })
 });
