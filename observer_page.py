@@ -13,7 +13,7 @@ DAY = 86400
 @app.route('/')
 def occurrences():
     session = SQLSession(config['database'])
-    now = int(datetime.utcnow().timestamp())
+    now = int(datetime.now().timestamp())
     data = dict()
     all_time = session.counts(Mention.keyword)
     today = session.counts_between(Mention.keyword, now - DAY, now)
@@ -37,7 +37,7 @@ def occurrences():
 @app.route('/<keyword>')
 def keywords(keyword: str):
     session = SQLSession(config['database'])
-    upper = int(datetime.utcnow().timestamp())
+    upper = int(datetime.now().timestamp())
     lower = upper - DAY
     data = list()
     for _ in range(7):
