@@ -40,7 +40,7 @@ class SQLSession:
                        lower: int, upper: int) -> Dict[str, int]:
         query = self.session.query(column, func.count(column))
         query = query.filter(Mention.timestamp.between(lower, upper))
-        query = query.group_by(Mention.keyword)
+        query = query.group_by(column)
         return dict(query)
 
     def count_between(self, column: Union[QueryableAttribute, Type['Mention']],
