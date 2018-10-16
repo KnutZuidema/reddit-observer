@@ -17,6 +17,12 @@ class SQLSession:
     def close(self):
         self.session.close()
 
+    def add(self, instance: Any, _warn: bool = True):
+        self.session.add(instance, _warn)
+
+    def commit(self):
+        self.session.commit()
+
     def get_max(self, column: Union[QueryableAttribute, Type['Mention']]) -> Any:
         return self.session.query(func.max(column)).first()[0]
 
